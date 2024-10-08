@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from api.serializers import CursoSerializer, ProfesorSerializer, SeccionSerializer, BloqueSerializer, RequisitoSerializer
-from api.utils import process_excel
+from api.utils import get_data_from_excel
 
 #--------------------------------ViewSets--------------------------------------
 class CursoViewSet(viewsets.ModelViewSet):
@@ -41,7 +41,7 @@ class ExcelUploadView(APIView):
         excel_file = request.FILES['file']
 
         if excel_file:
-            inserted = process_excel(excel_file)
+            inserted = get_data_from_excel(excel_file)
             if inserted:
                 return Response(status=status.HTTP_201_CREATED, data={'message': 'Data inserted'})
             else:
