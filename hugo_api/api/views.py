@@ -35,7 +35,8 @@ class RequisitoViewSet(viewsets.ModelViewSet):
 #--------------------------------ViewSets--------------------------------------
 
 
-#
+
+#--------------------------------Upload Excel--------------------------------------
 @api_view(['POST'])
 def upload_excel(request):
     excel_file = request.FILES.get('file', None)
@@ -53,4 +54,5 @@ def upload_excel(request):
     return JsonResponse({
         'message': 'Data processed successfully',
     })
+#--------------------------------Upload Excel--------------------------------------
 
