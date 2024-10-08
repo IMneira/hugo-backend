@@ -34,7 +34,7 @@ class Bloque(models.Model):
     fecha = models.DateField(null=True)
 
     def __str__(self):
-        return self.dia
+        return self.dia_semana+ ' ' + self.hora_inicio + ' ' + self.hora_fin + ' ' + self.tipo
 
 class Requisito(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='curso_dependiente')

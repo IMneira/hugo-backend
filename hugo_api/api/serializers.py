@@ -1,4 +1,4 @@
-from models import Curso, Profesor, Seccion, Bloque, Requisito
+from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from rest_framework import serializers
 
 
