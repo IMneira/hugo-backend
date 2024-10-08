@@ -19,6 +19,7 @@ class Seccion(models.Model):
     profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     especialidad = models.CharField(max_length=50)
+    sala = models.CharField(max_length=20, null=True)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
 
