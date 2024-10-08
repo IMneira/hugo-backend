@@ -32,4 +32,5 @@ router.register(r'requisitos', views.RequisitoViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('upload-excel/', views.upload_excel, name='upload_excel'),
 ]

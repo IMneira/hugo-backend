@@ -1,15 +1,10 @@
 import pandas as pd
 from api.models import Curso, Profesor, Seccion, Bloque
 
-def get_data_from_excel(excel_file, header=14):
+def get_data_from_excel(excel_file, header=13):
     df = pd.read_excel(excel_file, header=header)
 
-    cursos = []
-    profesores = []
-    secciones = []
-    bloques = []
-
-    # días de la semana presentes en las columnas
+    # mapeo días de la semana
     dias_semana = {
         'LUNES': 1,
         'MARTES': 2,
@@ -19,61 +14,48 @@ def get_data_from_excel(excel_file, header=14):
     }
 
     for index, row in df.iterrows():
-        # agregar Curso
+        # agregar curso
         curso, created = Curso.objects.get_or_create(
             nombre=row['TITULO'],
-            defaults={'creditos': 3}  # -> falta implementar
+            defaults={
+                'creditos': 3,  # implementar en el futuro
+                'especialidad': row['AREA'] 
+            }
         )
-        cursos.append(curso)
 
-        # agregar profesor
+        # agregar profesor 
         profesor, created = Profesor.objects.get_or_create(
             nombre=row['PROFESOR']
         )
-        profesores.append(profesor)
 
-        # agregar seccion
-        seccion = Seccion(
-            nrc=row['NRC'],
-            profesor=profesor,
-            curso=curso,
-            especialidad=row['AREA'],
-            fecha_inicio=row['INICIO'],
-            fecha_fin=row['FIN']
-        )
-        secciones.append(seccion)
+        # agregar seccion 
+        if row['TIPO DE REUNIÓN'] == 'CLAS':
+            seccion, created = Seccion.objects.get_or_create(
+                nrc=row['NRC'],
+                profesor=profesor,
+                curso=curso
+            )
 
-        # procesar los bloques de los días de la semana
+        # agregar bloque
         for dia, dia_numero in dias_semana.items():
-            if pd.notna(row[dia]):  # solo si el dia tiene horario
+            if pd.notna(row[dia]):  # solo si el día tiene horario
                 try:
                     hora_inicio, hora_fin = row[dia].split('-')
                 except ValueError:
-                    print("hubo un error en la obtención del horario")
+                    print(f"Error en el horario para {row['TITULO']} el {dia}")
                     continue
                 
-                bloque = Bloque(
-                    dia_semana=dia_numero,  # número del día
+                bloque, created = Bloque.objects.get_or_create(
+                    dia_semana=dia_numero,  
                     hora_inicio=hora_inicio.strip(),
                     hora_fin=hora_fin.strip(),
                     tipo=row['TIPO DE REUNIÓN'],
                     seccion=seccion,
-                    fecha=row['INICIO']  # útil en caso de ser prueba
+                    defaults={
+                        'sala': row['SALA'],  
+                        'fecha_inicio': row['INICIO'],  
+                        'fecha_fin': row['FIN']
+                    }
                 )
-                bloques.append(bloque)
 
-    # insertar en la base de datos
-
-    try:
-        Curso.objects.bulk_create(cursos, ignore_conflicts=True)
-        Profesor.objects.bulk_create(profesores, ignore_conflicts=True)
-        Seccion.objects.bulk_create(secciones)
-        Bloque.objects.bulk_create(bloques)
-
-        return True
-    
-    except Exception as e:
-
-        print(e)
-        return False
-
+    return "Datos procesados correctamente."

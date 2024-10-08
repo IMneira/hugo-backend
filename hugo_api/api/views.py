@@ -1,9 +1,10 @@
 from rest_framework import viewsets, permissions, status
-from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from api.serializers import CursoSerializer, ProfesorSerializer, SeccionSerializer, BloqueSerializer, RequisitoSerializer
 from api.utils import get_data_from_excel
+from django.http import JsonResponse
 
 #--------------------------------ViewSets--------------------------------------
 class CursoViewSet(viewsets.ModelViewSet):
@@ -35,19 +36,21 @@ class RequisitoViewSet(viewsets.ModelViewSet):
 
 
 #
-class ExcelUploadView(APIView):
+@api_view(['POST'])
+def upload_excel(request):
+    excel_file = request.FILES.get('file', None)
+    
+    if excel_file is None:
+        return JsonResponse({'error': 'No file provided'}, status=400)
+    
+    try:
+        respuesta = get_data_from_excel(excel_file)
+        print(respuesta)
 
-    def post(self, request, *args, **kwargs):
-        excel_file = request.FILES['file']
+    except Exception as e:
+        return JsonResponse({'error inserting data': str(e)}, status=500)
 
-        if excel_file:
-            inserted = get_data_from_excel(excel_file)
-            if inserted:
-                return Response(status=status.HTTP_201_CREATED, data={'message': 'Data inserted'})
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Error inserting data'})
-
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'No file provided'})
-
+    return JsonResponse({
+        'message': 'Data processed successfully',
+    })
 
