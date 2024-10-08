@@ -37,6 +37,7 @@ class RequisitoViewSet(viewsets.ModelViewSet):
 
 
 #--------------------------------Upload Excel--------------------------------------
+#falta restringir para que solo acceda admin logueado
 @api_view(['POST'])
 def upload_excel(request):
     excel_file = request.FILES.get('file', None)
