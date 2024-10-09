@@ -10,7 +10,8 @@ def get_data_from_excel(excel_file, header=13):
         'MARTES': 2,
         'MIERCOLES': 3,
         'JUEVES': 4,
-        'VIERNES': 5
+        'VIERNES': 5,
+        'SABADO': 6,
     }
 
     for index, row in df.iterrows():
