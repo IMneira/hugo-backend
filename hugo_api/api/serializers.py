@@ -1,5 +1,6 @@
 from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 
 class CursoSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,5 +27,10 @@ class RequisitoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Requisito
         fields = ['url', 'curso', 'requisito']
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
 
 
