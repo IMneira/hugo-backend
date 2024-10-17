@@ -34,4 +34,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload-excel/', views.upload_excel, name='upload_excel'),
     path('login/', views.login, name='login'),
+    path('register/', views.register, name='register'),
 ]
