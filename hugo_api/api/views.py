@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.decorators import api_view, autentication_classes, permission_classes
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from django.contrib.auth.models import User
@@ -13,31 +13,31 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 #--------------------------------ViewSets--------------------------------------
-@autentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
     #permission_classes = [permissions.IsAuthenticated]
-@autentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class ProfesorViewSet(viewsets.ModelViewSet):
     queryset = Profesor.objects.all()
     serializer_class = ProfesorSerializer
     #permission_classes = [permissions.IsAuthenticated]
-@autentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class SeccionViewSet(viewsets.ModelViewSet):
     queryset = Seccion.objects.all()
     serializer_class = SeccionSerializer
     #permission_classes = [permissions.IsAuthenticated]
-@autentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class BloqueViewSet(viewsets.ModelViewSet):
     queryset = Bloque.objects.all()
     serializer_class = BloqueSerializer
     #permission_classes = [permissions.IsAuthenticated]
-@autentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class RequisitoViewSet(viewsets.ModelViewSet):
     queryset = Requisito.objects.all()
@@ -50,7 +50,7 @@ class RequisitoViewSet(viewsets.ModelViewSet):
 #--------------------------------Upload Excel--------------------------------------
 #falta restringir para que solo acceda admin logueado
 @api_view(['POST'])
-@autentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def upload_excel(request):
     excel_file = request.FILES.get('file', None)
