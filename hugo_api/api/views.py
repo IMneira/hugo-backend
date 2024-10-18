@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from django.contrib.auth.models import User
-from api.serializers import CursoSerializer, ProfesorSerializer, SeccionSerializer, BloqueSerializer, RequisitoSerializer, UserSerializer
+from api.serializers import CursoSerializer, ProfesorSerializer, SeccionSerializer, BloqueSerializer, RequisitoSerializer, UserSerializer, HorarioSerializer
 from api.utils import get_data_from_excel
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
@@ -11,6 +11,8 @@ from django.http import JsonResponse
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+
+from horarios import get_horarios
 
 #--------------------------------ViewSets--------------------------------------
 @authentication_classes([TokenAuthentication])
@@ -103,3 +105,25 @@ def register(request):
         return Response({'user': serializer.data, 'token': token.key}, status=201)
     return Response(serializer.errors, status=400)
 #-------------------------Sesion de administrador----------------------------------
+
+
+
+#-------------------------Obtención de horarios------------------------------------
+@api_view(['GET'])
+def get_horarios(request):
+    serializer = HorarioSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=400)
+
+    # obtener los datos
+    cursos = serializer.data['cursos']
+    permite_solapamiento = serializer.data['permite_solapamiento']
+    horarios_protegidos = serializer.data['horarios_protegidos']
+
+    horarios = get_horarios(cursos, permite_solapamiento, horarios_protegidos)
+
+    # generar horarios
+
+    return Response({'message': 'Horarios generados correctamente'}, status=200)
+#-------------------------Obtención de horarios------------------------------------

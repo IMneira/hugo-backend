@@ -34,3 +34,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'username', 'email', 'password']
 
 
+class HorarioSerializer(serializers.Serializer):
+    cursos = serializers.ListField(
+        child = serializers.IntegerField(),
+        required = True )
+    
+    permite_solapamiento = serializers.BooleanField(required = True)
+
+    horarios_protegidos = serializers.DictField(
+        child = serializers.ListField( child = serializers.CharField() ),
+        required = False )
