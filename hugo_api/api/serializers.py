@@ -21,7 +21,7 @@ class SeccionSerializer(serializers.HyperlinkedModelSerializer):
 class BloqueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bloque
-        fields = ['url', 'dia_semana', 'hora_inicio', 'hora_fin', 'seccion', 'tipo', 'fecha']
+        fields = ['dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala']
 
 class RequisitoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

@@ -1,4 +1,5 @@
 from api.models import Curso, Bloque, Seccion
+from api.serializers import BloqueSerializer
 import itertools
 
 
@@ -25,7 +26,7 @@ def usa_horario_protegido(combinacion, horarios_protegidos):
     pass
 
 
-def get_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = None):
+def generate_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = None):
     combinaciones = get_combinaciones_de_secciones(cursos_ids)
 
     horarios = []
@@ -43,13 +44,14 @@ def get_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = None):
         horario = []
         for seccion in combinacion:
             bloques = seccion.bloques.all()
-            horario.append(bloque for bloque in bloques) #falta que el bloque se agregue con la información que queremos usar y en el formato que queremos
-        
+            #horario.append(bloque for bloque in bloques) #falta que el bloque se agregue con la información que queremos usar y en el formato que queremos
+            for bloque in bloques:
+                serializer = BloqueSerializer(bloque)
+                horario.append(serializer.data)
         horarios.append(horario)
 
         
         
 
     return horarios
-
 
