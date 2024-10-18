@@ -1,4 +1,4 @@
-from models import Curso, Bloque, Seccion
+from api.models import Curso, Bloque, Seccion
 import itertools
 
 

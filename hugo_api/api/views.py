@@ -12,7 +12,7 @@ from django.http import JsonResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from horarios import get_horarios
+from api.horarios import get_horarios
 
 #--------------------------------ViewSets--------------------------------------
 @authentication_classes([TokenAuthentication])
@@ -109,7 +109,7 @@ def register(request):
 
 
 #-------------------------Obtención de horarios------------------------------------
-@api_view(['GET'])
+@api_view(['POST'])
 def get_horarios(request):
     serializer = HorarioSerializer(data=request.data)
 
@@ -117,13 +117,14 @@ def get_horarios(request):
         return Response(serializer.errors, status=400)
 
     # obtener los datos
-    cursos = serializer.data['cursos']
-    permite_solapamiento = serializer.data['permite_solapamiento']
-    horarios_protegidos = serializer.data['horarios_protegidos']
+    cursos = serializer.validated_data['cursos']
+    permite_solapamiento = serializer.validated_data['permite_solapamiento']
+    #horarios_protegidos = serializer.data['horarios_protegidos']
 
-    horarios = get_horarios(cursos, permite_solapamiento, horarios_protegidos)
+    #horarios = get_horarios([1,2,3], True) #horarios_protegidos)
 
+    horarios = "test"
     # generar horarios
 
-    return Response({'message': 'Horarios generados correctamente'}, status=200)
+    return Response({'message': 'Horarios generados correctamente', 'data':horarios}, status=200)
 #-------------------------Obtención de horarios------------------------------------
