@@ -12,6 +12,8 @@ from django.http import JsonResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from horarios import get_horarios
+
 #--------------------------------ViewSets--------------------------------------
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -118,6 +120,8 @@ def get_horarios(request):
     cursos = serializer.data['cursos']
     permite_solapamiento = serializer.data['permite_solapamiento']
     horarios_protegidos = serializer.data['horarios_protegidos']
+
+    horarios = get_horarios(cursos, permite_solapamiento, horarios_protegidos)
 
     # generar horarios
 

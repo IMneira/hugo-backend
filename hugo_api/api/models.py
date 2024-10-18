@@ -27,7 +27,7 @@ class Bloque(models.Model):
     dia_semana = models.IntegerField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
-    seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
+    seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE, related_name='bloques')
     tipo = models.CharField(max_length=50)
     sala = models.CharField(max_length=20, null=True)
     fecha_inicio = models.DateField(null=True)
