@@ -35,4 +35,6 @@ urlpatterns = [
     path('upload-excel/', views.upload_excel, name='upload_excel'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
+    #path('logout/', views.logout, name='logout'),
+    path('get_horarios/', views.get_horarios, name='get_horarios'),
 ]
