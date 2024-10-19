@@ -19,9 +19,12 @@ class SeccionSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'nrc', 'profesor', 'curso', 'especialidad', 'fecha_inicio', 'fecha_fin']
     
 class BloqueSerializer(serializers.HyperlinkedModelSerializer):
+    nombre_curso = serializers.CharField(source='seccion.curso.nombre', read_only=True)
+    nombre_profesor = serializers.CharField(source='seccion.profesor.nombre', read_only=True)
+    nrc = serializers.IntegerField(source='seccion.nrc', read_only=True)
     class Meta:
         model = Bloque
-        fields = ['dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala']
+        fields = ['nrc','nombre_curso','nombre_profesor','dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala']
 
 class RequisitoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
