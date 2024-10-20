@@ -123,6 +123,9 @@ def get_horarios(request):
 
     horarios = generate_horarios(cursos, permite_solapamiento) #horarios_protegidos)
 
+    if len(horarios) == 0:
+        return Response({'message': 'No fue posible generar horarios con las preferencias seleccionadas', 'data':horarios}, status=500)
+
     #horarios = "test"
     # generar horarios
 
