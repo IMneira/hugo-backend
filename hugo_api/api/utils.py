@@ -11,7 +11,6 @@ def get_data_from_excel(excel_file, header=13):
         'MIERCOLES': 3,
         'JUEVES': 4,
         'VIERNES': 5,
-        'SABADO': 6,
     }
 
     for index, row in df.iterrows():

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class CursoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Curso
-        fields = ['url', 'nombre', 'creditos']
+        fields = ['url', 'nombre', 'id']
 
 class ProfesorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -16,7 +16,7 @@ class ProfesorSerializer(serializers.HyperlinkedModelSerializer):
 class SeccionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Seccion
-        fields = ['url', 'nrc', 'profesor', 'curso', 'especialidad', 'fecha_inicio', 'fecha_fin']
+        fields = ['url', 'nrc', 'profesor', 'curso']
     
 class BloqueSerializer(serializers.HyperlinkedModelSerializer):
     nombre_curso = serializers.CharField(source='seccion.curso.nombre', read_only=True)
@@ -44,6 +44,6 @@ class HorarioSerializer(serializers.Serializer):
     
     permite_solapamiento = serializers.BooleanField(required = True)
 
-    horarios_protegidos = serializers.DictField(
-        child = serializers.ListField( child = serializers.CharField() ),
+    horarios_protegidos = serializers.ListField(
+        child = serializers.DictField(),
         required = False )

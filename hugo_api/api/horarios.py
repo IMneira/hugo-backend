@@ -1,6 +1,7 @@
 from api.models import Curso, Bloque, Seccion
-from api.serializers import BloqueSerializer
+from api.serializers import BloqueSerializer, SeccionSerializer
 import itertools
+from datetime import datetime
 
 
 
@@ -36,8 +37,24 @@ def hay_solapamiento(combinacion):
     return False
 
 def usa_horario_protegido(combinacion, horarios_protegidos):
-    #combinacion es una lista de secciones (objetos de la clase Seccion)
-    pass
+    for seccion in combinacion:
+        for bloque in seccion.bloques.all():
+            for horario_protegido in horarios_protegidos:
+                print(horario_protegido["dia_de_semana"])
+                if bloque.dia_semana == horario_protegido['dia_de_semana']:
+                
+                    bloque_hora_inicio = bloque.hora_inicio
+                    bloque_hora_fin = bloque.hora_fin
+                    protegido_hora_inicio = datetime.strptime(horario_protegido['hora_inicio'], '%H:%M').time()
+                    protegido_hora_fin = datetime.strptime(horario_protegido['hora_fin'], '%H:%M').time()
+                    print(protegido_hora_fin)
+                    
+                    solapan_horas = (bloque_hora_inicio < protegido_hora_fin and protegido_hora_inicio < bloque_hora_fin)
+
+                    if solapan_horas:
+                        return True
+
+    return False
 
 
 def generate_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = None):
@@ -50,7 +67,7 @@ def generate_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = No
             if hay_solapamiento(combinacion):
                 continue
         
-        if horarios_protegidos != None:
+        if len(horarios_protegidos) != 0:
             if usa_horario_protegido(combinacion, horarios_protegidos):
                 continue
 
@@ -68,4 +85,6 @@ def generate_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = No
         
 
     return horarios
+
+
 
