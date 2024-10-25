@@ -11,15 +11,15 @@ from django.http import JsonResponse
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from api.horarios import generate_horarios
 
 #--------------------------------ViewSets--------------------------------------
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
     #permission_classes = [permissions.IsAuthenticated]
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
