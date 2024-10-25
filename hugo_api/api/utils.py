@@ -29,12 +29,10 @@ def get_data_from_excel(excel_file, header=13):
         )
 
         # agregar seccion 
-        if row['TIPO DE REUNIÓN'] == 'CLAS':
-            seccion, created = Seccion.objects.get_or_create(
-                nrc=row['NRC'],
-                profesor=profesor,
-                curso=curso
-            )
+        seccion, created = Seccion.objects.get_or_create(
+            nrc=row['NRC'],
+            defaults={'profesor': profesor, 'curso': curso}
+        )
 
         # agregar bloque
         for dia, dia_numero in dias_semana.items():
@@ -46,16 +44,16 @@ def get_data_from_excel(excel_file, header=13):
                     continue
                 
                 bloque, created = Bloque.objects.get_or_create(
-                    dia_semana=dia_numero,  
+                    dia_semana=dia_numero,
                     hora_inicio=hora_inicio.strip(),
                     hora_fin=hora_fin.strip(),
-                    tipo=row['TIPO DE REUNIÓN'],
                     seccion=seccion,
-                    defaults={
-                        'sala': row['SALA'],  
-                        'fecha_inicio': row['INICIO'],  
-                        'fecha_fin': row['FIN']
-                    }
+                    tipo=row['TIPO DE REUNIÓN'],
+                    fecha_inicio=row['INICIO'],
+                    fecha_fin=row['FIN'],
+                    sala = row['SALA'],
+                    
                 )
+                
 
     return "Datos procesados correctamente."
