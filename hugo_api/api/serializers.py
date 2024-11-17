@@ -42,6 +42,12 @@ class HorarioSerializer(serializers.Serializer):
         child = serializers.IntegerField(),
         required = True )
     
+    cursos_obligatorios = serializers.ListField(
+        child = serializers.IntegerField(),
+        required = True )
+    
+    minimo_n_cursos = serializers.IntegerField(required = True)
+
     permite_solapamiento = serializers.BooleanField(required = True)
 
     horarios_protegidos = serializers.ListField(

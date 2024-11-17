@@ -4,19 +4,37 @@ import itertools
 from datetime import datetime
 
 
-
-def get_combinaciones_de_secciones(cursos_ids):
-    secciones_por_curso = []
-
-    for curso_id in cursos_ids:
+def get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n_cursos):
+    # Obtener las secciones de los cursos obligatorios
+    secciones_obligatorias = []
+    for curso_id in cursos_obligatorios_ids:
         curso = Curso.objects.get(id=curso_id)
         secciones = Seccion.objects.filter(curso=curso)
-        secciones_por_curso.append(secciones)
-
-    # obtener todas las combinaciones de secciones, tomando una sección por curso
-    combinaciones = list(itertools.product(*secciones_por_curso))
-
-    return combinaciones
+        secciones_obligatorias.append(secciones)
+    
+    # Obtener las secciones de los cursos no obligatorios
+    cursos_no_obligatorios = [curso_id for curso_id in cursos_ids if curso_id not in cursos_obligatorios_ids]
+    secciones_no_obligatorias = []
+    for curso_id in cursos_no_obligatorios:
+        curso = Curso.objects.get(id=curso_id)
+        secciones = Seccion.objects.filter(curso=curso)
+        secciones_no_obligatorias.append(secciones)
+    
+    # Generar combinaciones para las secciones obligatorias (fijas)
+    combinaciones_obligatorias = list(itertools.product(*secciones_obligatorias))
+    
+    # Generar combinaciones de los cursos no obligatorios (tomando de minimo_n_cursos a len(cursos_ids) cursos)
+    combinaciones_finales = []
+    for r in range(max(0, minimo_n_cursos - len(cursos_obligatorios_ids)), len(cursos_no_obligatorios) + 1):
+        combinaciones_no_obligatorias = itertools.combinations(secciones_no_obligatorias, r)
+        for combinacion_no_obligatoria in combinaciones_no_obligatorias:
+            # Convertir las listas de secciones en combinaciones específicas
+            secciones_por_curso = list(itertools.product(*combinacion_no_obligatoria))
+            for obligatoria in combinaciones_obligatorias:
+                for opcional in secciones_por_curso:
+                    combinaciones_finales.append(obligatoria + opcional)
+    
+    return combinaciones_finales
 
 def hay_solapamiento(combinacion):
     dict_bloques = {dia: [] for dia in range(1, 7)}
@@ -35,6 +53,9 @@ def hay_solapamiento(combinacion):
                         solapan_fechas = (bloque_i.fecha_inicio < bloque_j.fecha_fin and bloque_j.fecha_inicio < bloque_i.fecha_fin)
                         if solapan_horas and solapan_fechas: return True
     return False
+
+
+
 
 def usa_horario_protegido(combinacion, horarios_protegidos):
     for seccion in combinacion:
@@ -57,8 +78,8 @@ def usa_horario_protegido(combinacion, horarios_protegidos):
     return False
 
 
-def generate_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = None):
-    combinaciones = get_combinaciones_de_secciones(cursos_ids)
+def generate_horarios(cursos_ids, permite_solapamiento, minimo_n_cursos, cursos_obligatorios_ids, horarios_protegidos = None):
+    combinaciones = get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n_cursos)
 
     horarios = []
 
@@ -85,6 +106,8 @@ def generate_horarios(cursos_ids, permite_solapamiento, horarios_protegidos = No
         
 
     return horarios
+
+
 
 
 
