@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('upload-excel/', views.upload_excel, name='upload_excel'),
+    path('reset-database/', views.clear_database, name='reset_database'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
     #path('logout/', views.logout, name='logout'),

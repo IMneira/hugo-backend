@@ -1,7 +1,16 @@
 import pandas as pd
 from api.models import Curso, Profesor, Seccion, Bloque
+from django.apps import apps
+
+
+def reset_database():
+    app = apps.get_app_config('api')
+    for model_name, model in app.models.items():
+        model.objects.all().delete()
+    return "Base de datos reiniciada."
 
 def get_data_from_excel(excel_file, header=13):
+    reset_database()
     df = pd.read_excel(excel_file, header=header)
 
     # mapeo días de la semana
