@@ -4,7 +4,7 @@ import itertools
 from datetime import datetime
 
 
-def get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n_cursos):
+def get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n_cursos, max_n_creditos):
     # Obtener las secciones de los cursos obligatorios
     secciones_obligatorias = []
     for curso_id in cursos_obligatorios_ids:
@@ -78,8 +78,8 @@ def usa_horario_protegido(combinacion, horarios_protegidos):
     return False
 
 
-def generate_horarios(cursos_ids, permite_solapamiento, minimo_n_cursos, cursos_obligatorios_ids, horarios_protegidos = None):
-    combinaciones = get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n_cursos)
+def generate_horarios(cursos_ids, permite_solapamiento, minimo_n_cursos, cursos_obligatorios_ids, max_n_creditos, horarios_protegidos = None):
+    combinaciones = get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n_cursos, max_n_creditos)
 
     horarios = []
 

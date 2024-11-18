@@ -122,8 +122,9 @@ def get_horarios(request):
     minimo_n_cursos = serializer.validated_data['minimo_n_cursos']
     permite_solapamiento = serializer.validated_data['permite_solapamiento']
     horarios_protegidos = serializer.data['horarios_protegidos']
+    max_n_creditos = serializer.validated_data['max_n_creditos']
 
-    horarios = generate_horarios(cursos, permite_solapamiento, minimo_n_cursos, cursos_obligatorios,horarios_protegidos) 
+    horarios = generate_horarios(cursos, permite_solapamiento, minimo_n_cursos, cursos_obligatorios, max_n_creditos, horarios_protegidos) 
 
     if len(horarios) == 0:
         return Response({'message': 'No fue posible generar horarios con las preferencias seleccionadas', 'data':horarios}, status=500)

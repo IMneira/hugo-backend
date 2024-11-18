@@ -50,6 +50,8 @@ class HorarioSerializer(serializers.Serializer):
 
     permite_solapamiento = serializers.BooleanField(required = True)
 
+    max_n_creditos = serializers.IntegerField(required = True)
+
     horarios_protegidos = serializers.ListField(
         child = serializers.DictField(),
         required = False )
