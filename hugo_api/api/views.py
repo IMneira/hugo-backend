@@ -16,6 +16,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from api.horarios import generate_horarios
 
 #--------------------------------ViewSets--------------------------------------
+@authentication_classes([TokenAuthentication])
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
