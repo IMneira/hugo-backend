@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class CursoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Curso
-        fields = ['url', 'nombre', 'id']
+        fields = ['url', 'nombre', 'id','creditos']
 
 class ProfesorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

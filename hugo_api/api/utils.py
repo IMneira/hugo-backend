@@ -18,7 +18,7 @@ def get_data_from_excel(excel_file, header=13):
         curso, created = Curso.objects.get_or_create(
             nombre=row['TITULO'],
             defaults={
-                'creditos': 3,  # implementar en el futuro
+                'creditos': 6,  # implementar en el futuro
                 'especialidad': row['AREA'] 
             }
         )
