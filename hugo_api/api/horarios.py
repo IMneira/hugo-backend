@@ -32,7 +32,10 @@ def get_combinaciones_de_secciones(cursos_ids, cursos_obligatorios_ids, minimo_n
             secciones_por_curso = list(itertools.product(*combinacion_no_obligatoria))
             for obligatoria in combinaciones_obligatorias:
                 for opcional in secciones_por_curso:
-                    combinaciones_finales.append(obligatoria + opcional)
+                    combinacion_total = obligatoria + opcional
+                    total_creditos = sum(seccion.curso.creditos for seccion in combinacion_total)
+                    if total_creditos <= max_n_creditos:
+                        combinaciones_finales.append(combinacion_total)
     
     return combinaciones_finales
 
