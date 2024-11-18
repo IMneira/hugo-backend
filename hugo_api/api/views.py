@@ -23,19 +23,19 @@ class CursoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     #permission_classes = [permissions.IsAuthenticated]
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 class ProfesorViewSet(viewsets.ModelViewSet):
     queryset = Profesor.objects.all()
     serializer_class = ProfesorSerializer
     #permission_classes = [permissions.IsAuthenticated]
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 class SeccionViewSet(viewsets.ModelViewSet):
     queryset = Seccion.objects.all()
     serializer_class = SeccionSerializer
     #permission_classes = [permissions.IsAuthenticated]
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 class BloqueViewSet(viewsets.ModelViewSet):
     queryset = Bloque.objects.all()
     serializer_class = BloqueSerializer
