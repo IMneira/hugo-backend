@@ -4,10 +4,11 @@ from rest_framework.response import Response
 from api.models import Curso, Profesor, Seccion, Bloque, Requisito
 from django.contrib.auth.models import User
 from api.serializers import CursoSerializer, ProfesorSerializer, SeccionSerializer, BloqueSerializer, RequisitoSerializer, UserSerializer, HorarioSerializer
-from api.utils import get_data_from_excel
+from api.utils import get_data_from_excel, reset_database
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -72,6 +73,18 @@ def upload_excel(request):
         'message': 'Data processed successfully',
     })
 #--------------------------------Upload Excel--------------------------------------
+
+
+
+#-------------------------Resetear base de datos----------------------------------
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@csrf_exempt
+def clear_database(request):
+    respuesta = reset_database()
+    return JsonResponse({'message': respuesta})    
+#-------------------------Resetear base de datos----------------------------------
 
 
 
