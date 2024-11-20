@@ -4,27 +4,45 @@ from django.contrib.auth.models import User
 
 
 class CursoSerializer(serializers.HyperlinkedModelSerializer):
+    nombre = serializers.CharField(max_length=100)
+    creditos = serializers.IntegerField()
+    especialidad = serializers.CharField(max_length=100, required=False)
     class Meta:
         model = Curso
-        fields = ['url', 'nombre', 'id','creditos']
+        fields = ['id', 'nombre', 'creditos', 'especialidad']
 
 class ProfesorSerializer(serializers.HyperlinkedModelSerializer):
+    nombre = serializers.CharField(max_length=100)
     class Meta:
         model = Profesor
-        fields = ['url', 'nombre']
+        fields = ['id','nombre']
 
 class SeccionSerializer(serializers.HyperlinkedModelSerializer):
+    nrc = serializers.IntegerField()
+    profesor = serializers.PrimaryKeyRelatedField(queryset=Profesor.objects.all())
+    curso = serializers.PrimaryKeyRelatedField(queryset=Curso.objects.all())
     class Meta:
         model = Seccion
-        fields = ['url', 'nrc', 'profesor', 'curso']
+        fields = ['nrc', 'profesor', 'curso']
     
 class BloqueSerializer(serializers.HyperlinkedModelSerializer):
+    seccion = serializers.PrimaryKeyRelatedField(queryset=Seccion.objects.all())
+    dia_semana = serializers.IntegerField()
+    hora_inicio = serializers.TimeField()
+    hora_fin = serializers.TimeField()
+    tipo = serializers.CharField(max_length=50)
+    sala = serializers.CharField(max_length=20, allow_null=True)
+    fecha_inicio = serializers.DateField(allow_null=False)
+    fecha_fin = serializers.DateField(allow_null=False)
+
+    #solo lectura, no para la creación de instancias
+    nrc = serializers.IntegerField(source='seccion.nrc', read_only=True)
     nombre_curso = serializers.CharField(source='seccion.curso.nombre', read_only=True)
     nombre_profesor = serializers.CharField(source='seccion.profesor.nombre', read_only=True)
-    nrc = serializers.IntegerField(source='seccion.nrc', read_only=True)
+    
     class Meta:
         model = Bloque
-        fields = ['nrc','nombre_curso','nombre_profesor','dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala']
+        fields = ['id','nrc','nombre_curso','nombre_profesor','dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala', 'seccion']
 
 class RequisitoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
