@@ -34,6 +34,13 @@ class ProfesorViewSet(viewsets.ModelViewSet):
 class SeccionViewSet(viewsets.ModelViewSet):
     queryset = Seccion.objects.all()
     serializer_class = SeccionSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        curso_id = self.request.query_params.get('curso', None)
+        if curso_id:
+            queryset = queryset.filter(curso_id=curso_id)
+        return queryset
     #permission_classes = [permissions.IsAuthenticated]
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
