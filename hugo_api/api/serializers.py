@@ -16,14 +16,6 @@ class ProfesorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profesor
         fields = ['id','nombre']
-
-class SeccionSerializer(serializers.HyperlinkedModelSerializer):
-    nrc = serializers.IntegerField()
-    profesor = serializers.PrimaryKeyRelatedField(queryset=Profesor.objects.all())
-    curso = serializers.PrimaryKeyRelatedField(queryset=Curso.objects.all())
-    class Meta:
-        model = Seccion
-        fields = ['nrc', 'profesor', 'curso']
     
 class BloqueSerializer(serializers.HyperlinkedModelSerializer):
     seccion = serializers.PrimaryKeyRelatedField(queryset=Seccion.objects.all())
@@ -36,13 +28,28 @@ class BloqueSerializer(serializers.HyperlinkedModelSerializer):
     fecha_fin = serializers.DateField(allow_null=False)
 
     #solo lectura, no para la creación de instancias
-    nrc = serializers.IntegerField(source='seccion.nrc', read_only=True)
-    nombre_curso = serializers.CharField(source='seccion.curso.nombre', read_only=True)
-    nombre_profesor = serializers.CharField(source='seccion.profesor.nombre', read_only=True)
+    # nrc = serializers.IntegerField(source='seccion.nrc', read_only=True)
+    # nombre_curso = serializers.CharField(source='seccion.curso.nombre', read_only=True)
+    # nombre_profesor = serializers.CharField(source='seccion.profesor.nombre', read_only=True)
     
     class Meta:
         model = Bloque
-        fields = ['id','nrc','nombre_curso','nombre_profesor','dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala', 'seccion']
+        fields = ['id','dia_semana', 'hora_inicio', 'hora_fin', 'tipo', 'fecha_inicio', 'fecha_fin', 'sala', 'seccion']
+
+class SeccionSerializer(serializers.HyperlinkedModelSerializer):
+    nrc = serializers.IntegerField()
+    profesor = serializers.PrimaryKeyRelatedField(queryset=Profesor.objects.all())
+    curso = serializers.PrimaryKeyRelatedField(queryset=Curso.objects.all())
+
+    #read only
+    creditos = serializers.IntegerField(source='curso.creditos', read_only=True)
+    nombre_curso = serializers.CharField(source='curso.nombre', read_only=True)
+    nombre_profesor = serializers.CharField(source='profesor.nombre', read_only=True)
+    especialidad = serializers.CharField(source='curso.especialidad', read_only=True)
+    bloques = BloqueSerializer(many=True, read_only=True)
+    class Meta:
+        model = Seccion
+        fields = ['nrc', 'profesor', 'curso', 'creditos', 'nombre_curso', 'nombre_profesor', 'especialidad', 'bloques']
 
 class RequisitoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
